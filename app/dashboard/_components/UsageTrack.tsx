@@ -1,0 +1,92 @@
+"use client"
+
+import { Button } from '@/components/ui/button'
+import { db } from '@/utils/db';
+import { AIOutput, UserSubscription as UserSubscriptionTable } from '@/utils/schema';
+import { useUser } from '@clerk/nextjs';
+import { eq } from 'drizzle-orm';
+import React, { use, useContext, useEffect } from 'react'
+import { HISTORY } from '../history/page';
+import { TotalTokensContext } from '@/app/(context)/TotalTokensContext';
+import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
+import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageContext';
+
+function UsageTrack() {
+    const { user } = useUser();
+    const { totalTokens, setTotalTokens } = useContext(TotalTokensContext);
+    const { userSubscription, setUserSubscription } = useContext(UserSubscriptionContext);
+    const {updateCreditUsage, setUpdateCreditUsage} = useContext(UpdateCreditUsageContext);
+
+    useEffect(() => {
+        if (user) {
+            GetData();
+            IsUserSubscribe();
+        }
+        // eslint-disable-next-line
+    }, [user]);
+
+
+    useEffect(() => {
+        user&&GetData();
+    },[updateCreditUsage&&user]);
+
+
+
+
+    const GetData = async () => {
+        const resultText: HISTORY[] = await db
+            .select()
+            .from(AIOutput)
+            .where(eq(AIOutput.createdBy, user?.primaryEmailAddress?.emailAddress));
+        GetTotalTokens(resultText);
+    };
+
+    const IsUserSubscribe = async () => {
+        const resultText = await db
+            .select()
+            .from(UserSubscriptionTable)
+            .where(eq(UserSubscriptionTable.email, user?.primaryEmailAddress?.emailAddress));
+        if (resultText && resultText.length > 0) {
+            setUserSubscription(true);
+        } else {
+            setUserSubscription(false);
+        }
+    };
+
+    const GetTotalTokens = (resultText: HISTORY[]) => {
+        let total = 0;
+        resultText.forEach(element => {
+            total = total + Number(element.aiResponse?.length || 0);
+        });
+        setTotalTokens(total);
+        console.log(total);
+    };
+
+    // Set max tokens based on subscription
+    const maxTokens = userSubscription ? 100000 : 10000;
+    const percent = Math.min((totalTokens / maxTokens) * 100, 100);
+
+    return (
+        <div className='m-5'>
+            <div className='bg-purple-500 text-white p-3 rounded-lg'>
+                <h2 className='font-medium'>Credits</h2>
+                <div className='h-2 bg-purple-300 w-full rounded-full mt-3'>
+                    <div
+                        className='h-2 bg-white rounded-full'
+                        style={{
+                            width: percent + '%'
+                        }}
+                    ></div>
+                </div>
+                <h2 className='text-sm my-2'>
+                    {totalTokens}/{maxTokens.toLocaleString()} Credit Used
+                </h2>
+            </div>
+            <Button variant={'secondary'} className='w-full my-3 bg-purple-500 text-white'>
+                Upgrade
+            </Button>
+        </div>
+    );
+}
+
+export default UsageTrack;
