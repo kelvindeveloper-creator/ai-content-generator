@@ -21,7 +21,7 @@ function CreateNewContent() {
   const params = useParams();
 
   const selectedTemplate: TEMPLATE | undefined = Templates?.find(
-    (item) => item.slug === params['template-slug']
+    (item) => item.slug === params?.['template-slug']
   );
 
   const [loading, setLoading] = React.useState(false);
@@ -95,11 +95,13 @@ function CreateNewContent() {
       </Link>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-5 py-5'>
         {/* FormSection */}
-        <FormSection
-          selectedTemplate={selectedTemplate}
-          userFormInput={(v: any) => GeneratedAiContent(v)}
-          loading={loading}
-        />
+        {selectedTemplate && (
+          <FormSection
+            selectedTemplate={selectedTemplate}
+            userFormInput={(v: any) => GeneratedAiContent(v)}
+            loading={loading}
+          />
+        )}
 
         {/* OutputSection */}
         <div className='col-span-2'>
