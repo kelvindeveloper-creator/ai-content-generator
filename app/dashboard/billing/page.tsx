@@ -115,8 +115,13 @@ function Billing() {
                         disabled={loading}
                         createOrder={async (data, actions) => {
                           return actions.order.create({
+                            intent: "CAPTURE",
                             purchase_units: [{
-                              amount: { value: "9.99" },
+                              amount: { 
+                                value: "9.99",
+                                currency_code: "USD" 
+                          
+                              },
                               description: "Monthly Subscription",
                             }],
                           });
