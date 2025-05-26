@@ -5,7 +5,7 @@ import { db } from '@/utils/db';
 import { AIOutput, UserSubscription as UserSubscriptionTable } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import { eq } from 'drizzle-orm';
-import React, { use, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { HISTORY } from '../history/page';
 import { TotalTokensContext } from '@/app/(context)/TotalTokensContext';
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
@@ -15,7 +15,7 @@ function UsageTrack() {
     const { user } = useUser();
     const { totalTokens, setTotalTokens } = useContext(TotalTokensContext);
     const { userSubscription, setUserSubscription } = useContext(UserSubscriptionContext);
-    const {updateCreditUsage, setUpdateCreditUsage} = useContext(UpdateCreditUsageContext);
+    const { updateCreditUsage } = useContext(UpdateCreditUsageContext);
 
     useEffect(() => {
         if (user) {
@@ -25,27 +25,42 @@ function UsageTrack() {
         // eslint-disable-next-line
     }, [user]);
 
-
     useEffect(() => {
-        user&&GetData();
-    },[updateCreditUsage&&user]);
-
-
-
+        if (user && updateCreditUsage) {
+            GetData();
+        }
+    }, [updateCreditUsage, user]);
 
     const GetData = async () => {
-        const resultText: HISTORY[] = await db
+        const email = user?.primaryEmailAddress?.emailAddress;
+        if (!email) return;
+        const rawResult = await db
             .select()
             .from(AIOutput)
-            .where(eq(AIOutput.createdBy, user?.primaryEmailAddress?.emailAddress));
+            .where(eq(AIOutput.createdBy, email));
+
+        const resultText: HISTORY[] = rawResult.map(item => ({
+            id: item.id,
+            formdata: item.formdata ?? "",
+            aiResponse: item.aiResponse ?? "",
+            templateSlug: item.templateSlug,
+            createdBy: item.createdBy,
+            createdAt: item.createdAt ?? ""
+        }));
+
         GetTotalTokens(resultText);
     };
 
     const IsUserSubscribe = async () => {
+        const email = user?.primaryEmailAddress?.emailAddress;
+        if (!email) {
+            setUserSubscription(false);
+            return;
+        }
         const resultText = await db
             .select()
             .from(UserSubscriptionTable)
-            .where(eq(UserSubscriptionTable.email, user?.primaryEmailAddress?.emailAddress));
+            .where(eq(UserSubscriptionTable.email, email));
         if (resultText && resultText.length > 0) {
             setUserSubscription(true);
         } else {
