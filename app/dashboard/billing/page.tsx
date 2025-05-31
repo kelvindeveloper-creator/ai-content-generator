@@ -2,10 +2,7 @@
 import { Button } from '@/components/ui/button';
 import React, { useContext, useState } from 'react';
 import { Loader2Icon } from 'lucide-react';
-import { db } from '@/utils/db';
-import { UserSubscription } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
-import moment from 'moment';
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -13,21 +10,31 @@ function Billing() {
   const [loading, setLoading] = useState(false);
   const [showPayPal, setShowPayPal] = useState(false);
   const { user } = useUser();
-  const { userSubscription, setUserSubscription } = useContext(UserSubscriptionContext);
+  const { userSubscription } = useContext(UserSubscriptionContext);
 
-  // Save subscription info to DB after successful payment
-  const SaveSubscription = async (paymentId: string) => {
+  // Call API route to verify payment and update subscription
+  const verifyAndSaveSubscription = async (orderID: string) => {
     setLoading(true);
-    const result = await db.insert(UserSubscription).values({
-      email: user?.primaryEmailAddress?.emailAddress,
-      userName: user?.fullName,
-      active: true,
-      paymentId: paymentId,
-      joinDate: moment().format('DD/MM/YYYY'),
-    });
-    setLoading(false);
-    if (result) {
-      window.location.reload();
+    try {
+      const res = await fetch("/api/paypal/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderID,
+          email: user?.primaryEmailAddress?.emailAddress,
+          userName: user?.fullName,
+        }),
+      });
+      const result = await res.json();
+      setLoading(false);
+      if (result.success) {
+        window.location.reload();
+      } else {
+        alert("Payment verification failed: " + (result.error || ""));
+      }
+    } catch (err) {
+      setLoading(false);
+      alert("An error occurred while verifying payment.");
     }
   };
 
@@ -120,7 +127,6 @@ function Billing() {
                               amount: { 
                                 value: "9.99",
                                 currency_code: "USD" 
-                          
                               },
                               description: "Monthly Subscription",
                             }],
@@ -130,7 +136,7 @@ function Billing() {
                           setLoading(true);
                           const details = await actions.order?.capture();
                           if (details && details.id) {
-                            await SaveSubscription(details.id);
+                            await verifyAndSaveSubscription(details.id);
                           }
                         }}
                         onCancel={() => setShowPayPal(false)}

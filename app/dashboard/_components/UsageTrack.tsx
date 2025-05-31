@@ -6,6 +6,7 @@ import { AIOutput, UserSubscription as UserSubscriptionTable } from '@/utils/sch
 import { useUser } from '@clerk/nextjs';
 import { eq } from 'drizzle-orm';
 import React, { useContext, useEffect } from 'react'
+import { useRouter } from "next/navigation"; // <-- Add this import
 import { HISTORY } from '../history/page';
 import { TotalTokensContext } from '@/app/(context)/TotalTokensContext';
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
@@ -16,6 +17,7 @@ function UsageTrack() {
     const { totalTokens, setTotalTokens } = useContext(TotalTokensContext);
     const { userSubscription, setUserSubscription } = useContext(UserSubscriptionContext);
     const { updateCreditUsage } = useContext(UpdateCreditUsageContext);
+    const router = useRouter(); // <-- Add this line
 
     useEffect(() => {
         if (user) {
@@ -97,7 +99,11 @@ function UsageTrack() {
                     {totalTokens}/{maxTokens.toLocaleString()} Credit Used
                 </h2>
             </div>
-            <Button variant={'secondary'} className='w-full my-3 bg-purple-500 text-white'>
+            <Button
+                variant={'secondary'}
+                className='w-full my-3 bg-purple-500 text-white'
+                onClick={() => router.push("/dashboard/billing")}
+            >
                 Upgrade
             </Button>
         </div>
