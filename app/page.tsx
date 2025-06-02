@@ -27,7 +27,7 @@ export default function LandingPage() {
     <main className="relative min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0ea5e9] text-white flex flex-col overflow-hidden">
       {/* Fullscreen Slideshow Background */}
       <div
-        className="absolute top-0 left-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+        className="absolute top-0 left-0 w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out transform"
         style={{
           backgroundImage: `url(${creativeImages[current]})`,
           backgroundRepeat: "no-repeat",

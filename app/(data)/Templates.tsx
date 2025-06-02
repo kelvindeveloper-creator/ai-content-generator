@@ -264,6 +264,85 @@ export default  [
         ]
     },
 
+    // ...existing code...
+    {
+        name: 'LinkedIn Post Generator',
+        desc: 'Generate professional LinkedIn posts tailored to your audience and goals.',
+        icon: 'https://cdn-icons-png.flaticon.com/128/3536/3536505.png',
+        category: 'LinkedIn',
+        slug: 'linkedin-post-generator',
+        aiPrompt: 'Generate a professional LinkedIn post based on the given topic and outline. Output in rich text editor format.',
+        form: [
+            {
+                label: 'Enter your LinkedIn post topic or goal',
+                field: 'input',
+                name: 'topic',
+                required: true
+            },
+            {
+                label: 'Enter outline or key points (optional)',
+                field: 'textarea',
+                name: 'outline'
+            }
+        ]
+    },
+    {
+        name: 'LinkedIn Hashtag Generator',
+        desc: 'Generate relevant hashtags for your LinkedIn posts to increase reach.',
+        icon: 'https://cdn-icons-png.flaticon.com/128/3536/3536505.png',
+        category: 'LinkedIn',
+        slug: 'linkedin-hashtag-generator',
+        aiPrompt: 'Generate 10 relevant LinkedIn hashtags based on the given topic. Output in rich text editor format.',
+        form: [
+            {
+                label: 'Enter your LinkedIn post topic or keywords',
+                field: 'input',
+                name: 'keywords',
+                required: true
+            }
+        ]
+    },
+    
+{
+    name: 'Bluesky (bsky.app) Post Generator',
+    desc: 'Create engaging posts for Bluesky (bsky.app) based on your topic or idea.',
+    icon: '/bsky-logo.png',
+    category: 'Bluesky',
+    slug: 'bluesky-post-generator',
+    aiPrompt: 'Generate an engaging post for Bluesky (bsky.app) based on the given topic or idea. Output in rich text editor format.',
+    form: [
+        {
+            label: 'Enter your Bluesky (bsky.app) post topic or idea',
+            field: 'input',
+            name: 'topic',
+            required: true
+        },
+        {
+            label: 'Enter additional context or style (optional)',
+            field: 'textarea',
+            name: 'context'
+        }
+    ]
+},
+{
+    name: 'Bluesky (bsky.app) Hashtag Generator',
+    desc: 'Generate trending hashtags for your Bluesky (bsky.app) posts.',
+    icon: '/bsky-logo.png',
+    category: 'Bluesky',
+    slug: 'bluesky-hashtag-generator~',
+    aiPrompt: 'Generate 10 trending hashtags for Bluesky (bsky.app) based on the given topic. Output in rich text editor format.',
+    form: [
+        {
+            label: 'Enter your Bluesky (bsky.app) post topic or keywords',
+            field: 'input',
+            name: 'keywords',
+            required: true
+        }
+    ]
+},
+
+
+
 
 
 ]
