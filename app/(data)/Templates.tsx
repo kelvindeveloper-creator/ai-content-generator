@@ -264,7 +264,7 @@ export default  [
         ]
     },
 
-    // ...existing code...
+    
     {
         name: 'LinkedIn Post Generator',
         desc: 'Generate professional LinkedIn posts tailored to your audience and goals.',
