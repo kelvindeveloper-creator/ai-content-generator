@@ -9,11 +9,18 @@ const creativeImages = [
   "/images/creative2.jpg",
   "/images/creative3.jpg",
   "/images/creative4.jpg",
-  
 ];
 
 export default function LandingPage() {
   const [current, setCurrent] = React.useState(0);
+
+  // Preload images
+  React.useEffect(() => {
+    creativeImages.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, []);
 
   // Slideshow effect
   React.useEffect(() => {
@@ -25,6 +32,20 @@ export default function LandingPage() {
 
   return (
     <main className="relative min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0ea5e9] text-white flex flex-col overflow-hidden">
+      {/* Google Analytics */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-PFFHR77283"
+        strategy="afterInteractive"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PFFHR77283');
+        `}
+      </Script>
+
       {/* Fullscreen Slideshow Background */}
       <div
         className="absolute top-0 left-0 w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out transform"
@@ -32,12 +53,9 @@ export default function LandingPage() {
           backgroundImage: `url(${creativeImages[current]})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          backgroundAttachment: "fixed", /* Keeps it fixed while scrolling */
+          backgroundAttachment: "fixed", // Keeps it fixed while scrolling
         }}
       ></div>
-
-
-
 
       {/* Main Content */}
       <div className="relative z-10">
