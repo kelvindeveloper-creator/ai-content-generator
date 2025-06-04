@@ -70,7 +70,7 @@ export default function LandingPage() {
         {/* Header */}
         <header className="flex justify-between items-center px-8 py-6">
           <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
-            MediaTools<span className="text-[#0ea5e9]">.online</span>
+            MediaTools<span className="text-[#0ea5e9]">Studio</span>
           </h1>
           <nav className="flex gap-6">
             <Link href="#features" className="hover:text-cyan-400 transition">Features</Link>
