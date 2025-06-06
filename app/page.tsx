@@ -105,21 +105,29 @@ export default function LandingPage() {
           </button>
           {/* Mobile Dropdown Menu */}
           {menuOpen && (
-            <div className="absolute top-full right-4 left-4 mt-2 bg-[#1e293b] rounded-xl shadow-lg flex flex-col py-4 z-50 animate-fade-in">
-              <Link href="#features" className="px-6 py-3 hover:bg-cyan-700 rounded transition" onClick={handleNavClick}>
-                Features
-              </Link>
-              <Link href="#pricing" className="px-6 py-3 hover:bg-cyan-700 rounded transition" onClick={handleNavClick}>
-                Pricing
-              </Link>
-              <Link href="#contact" className="px-6 py-3 hover:bg-cyan-700 rounded transition" onClick={handleNavClick}>
-                Contact
-              </Link>
-              <Link href="/dashboard" className="px-6 py-3 mt-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full font-semibold shadow transition text-center" onClick={handleNavClick}>
-                Sign In
-              </Link>
-            </div>
-          )}
+  <div
+    className="fixed inset-0 z-[100] bg-black/60 md:hidden"
+    onClick={handleNavClick}
+  >
+    <div
+      className="absolute top-16 left-4 right-4 bg-[#1e293b] rounded-xl shadow-lg flex flex-col py-4 z-[101] animate-fade-in"
+      onClick={e => e.stopPropagation()}
+    >
+      <Link href="#features" className="px-6 py-3 hover:bg-cyan-700 rounded transition" onClick={handleNavClick}>
+        Features
+      </Link>
+      <Link href="#pricing" className="px-6 py-3 hover:bg-cyan-700 rounded transition" onClick={handleNavClick}>
+        Pricing
+      </Link>
+      <Link href="#contact" className="px-6 py-3 hover:bg-cyan-700 rounded transition" onClick={handleNavClick}>
+        Contact
+      </Link>
+      <Link href="/dashboard" className="px-6 py-3 mt-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full font-semibold shadow transition text-center" onClick={handleNavClick}>
+        Sign In
+      </Link>
+    </div>
+  </div>
+)}
         </header>
 
         {/* AdSense Ad: Footer - Block 1 */}
