@@ -50,7 +50,7 @@ function SideNav() {
                 </div>
             </div>
 
-            {/* Mobile TopBar + Drawer */}
+            {/* Mobile TopBar */}
             <div className="md:hidden flex items-center justify-between p-4 shadow-sm border-b bg-white sticky top-0 z-40">
                 <button
                     aria-label="Open menu"
