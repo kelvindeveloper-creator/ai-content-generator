@@ -264,7 +264,7 @@ export default  [
         ]
     },
 
-    
+    // ...existing code...
     {
         name: 'LinkedIn Post Generator',
         desc: 'Generate professional LinkedIn posts tailored to your audience and goals.',
@@ -340,6 +340,55 @@ export default  [
         }
     ]
 },
+
+// ...existing code...
+{
+    name: 'Quotation Generator',
+    desc: 'Generate professional quotations for your clients with editable fields for items, prices, and company details.',
+    icon: 'https://cdn-icons-png.flaticon.com/128/3500/3500833.png', // Use any relevant icon URL
+    category: 'Business',
+    slug: 'quotation-generator',
+    aiPrompt: 'Generate a professional quotation document based on the provided company, client, and item details. Output in rich text editor format.',
+    form: [
+        {
+            label: 'Company Name',
+            field: 'input',
+            name: 'companyName',
+            required: true
+        },
+        {
+            label: 'Client Name',
+            field: 'input',
+            name: 'clientName',
+            required: true
+        },
+        {
+            label: 'Quotation Date',
+            field: 'input',
+            name: 'quotationDate',
+            required: true
+        },
+        {
+            label: 'Item List (name, description, qty, unit price)',
+            field: 'textarea',
+            name: 'items',
+            required: true
+        },
+        {
+            label: 'VAT (%)',
+            field: 'input',
+            name: 'vat',
+            required: false
+        },
+        {
+            label: 'Additional Notes',
+            field: 'textarea',
+            name: 'notes',
+            required: false
+        }
+    ]
+},
+
 
 
 
