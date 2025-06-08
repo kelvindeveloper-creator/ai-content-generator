@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import moment from 'moment';
-
+import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
 import { useParams, useRouter } from 'next/navigation';
 import { db } from '@/utils/db';
 import { AIOutput } from '@/utils/schema';
@@ -27,12 +27,24 @@ function CreateNewContent() {
   const [loading, setLoading] = React.useState(false);
   const [aiOutput, setAiOutput] = React.useState<string>('');
   const { user } = useUser();
+  const { userSubscription } = useContext(UserSubscriptionContext);
   const router = useRouter();
   const { totalTokens, setTotalTokens } = useContext(TotalTokensContext);
   const { updateCreditUsage, setUpdateCreditUsage } = useContext(UpdateCreditUsageContext);
 
+  // Guard: Wait for subscription context to load
+  if (!userSubscription) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px]">
+        <span>Loading your subscription status...</span>
+      </div>
+    );
+  }
+
+  const maxTokens = userSubscription.plan === "pro" ? 100000 : 10000;
+
   const GeneratedAiContent = async (formData: any) => {
-    if (totalTokens >= 10000) {
+    if (totalTokens >= maxTokens) {
       console.log('You have used all your credits. Please upgrade your plan.');
       router.push('/dashboard/billing');
       return;
@@ -63,15 +75,15 @@ function CreateNewContent() {
         resultText += decoder.decode(value, { stream: true });
       }
 
-      console.log(resultText); // or set it to state for display
+      // Set AI output to state for display
+      setAiOutput(resultText);
+      await SaveInDb(formData, selectedTemplate?.slug, resultText);
+
     } catch (error) {
       console.error('Failed to fetch AI content:', error);
     }
-    setAiOutput(resultText);
-    await SaveInDb(formData, selectedTemplate?.slug, resultText);
 
     setLoading(false);
-
     setUpdateCreditUsage(Date.now());
   };
 
