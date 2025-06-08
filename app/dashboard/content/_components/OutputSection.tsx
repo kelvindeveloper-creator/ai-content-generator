@@ -21,9 +21,21 @@ function OutputSection({aiOutput}:props) {
     <div className='bg-white shadow-lg border rounded-lg'>
       <div className='flex justify-between items-center p-5'>
         <h2 className='font-medium text-large'>Your Result</h2>
-        <Button className='bg-purple-500 flex gap-2'
-        onClick={()=>navigator.clipboard.writeText(aiOutput)}
-        ><Copy className='w-4 h-4'/>Copy</Button>
+        <Button
+  className='bg-purple-500 flex gap-2'
+  onClick={() => {
+    const editorInstance = editorRef.current.getInstance();
+    const html = editorInstance.getHTML();
+    navigator.clipboard.write([
+      new window.ClipboardItem({
+        "text/html": new Blob([html], { type: "text/html" }),
+        "text/plain": new Blob([html], { type: "text/plain" }),
+      }),
+    ]);
+  }}
+>
+  <Copy className='w-4 h-4'/>Copy
+</Button>
       </div>
       <Editor
       ref={editorRef}
