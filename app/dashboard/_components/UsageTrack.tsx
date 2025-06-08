@@ -6,18 +6,22 @@ import { AIOutput, UserSubscription as UserSubscriptionTable } from '@/utils/sch
 import { useUser } from '@clerk/nextjs';
 import { eq } from 'drizzle-orm';
 import React, { useContext, useEffect } from 'react'
-import { useRouter } from "next/navigation"; // <-- Add this import
+import { useRouter } from "next/navigation";
 import { HISTORY } from '../history/page';
 import { TotalTokensContext } from '@/app/(context)/TotalTokensContext';
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
 import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageContext';
+import type { UserSubscription } from '@/app/(context)/UserSubscriptionContext';
 
 function UsageTrack() {
     const { user } = useUser();
     const { totalTokens, setTotalTokens } = useContext(TotalTokensContext);
-    const { userSubscription, setUserSubscription } = useContext(UserSubscriptionContext);
+    const { userSubscription, setUserSubscription } = useContext(UserSubscriptionContext) as {
+        userSubscription: UserSubscription | null;
+        setUserSubscription: React.Dispatch<React.SetStateAction<UserSubscription | null>>;
+    };
     const { updateCreditUsage } = useContext(UpdateCreditUsageContext);
-    const router = useRouter(); // <-- Add this line
+    const router = useRouter();
 
     useEffect(() => {
         if (user) {
@@ -56,7 +60,7 @@ function UsageTrack() {
     const IsUserSubscribe = async () => {
         const email = user?.primaryEmailAddress?.emailAddress;
         if (!email) {
-            setUserSubscription(false);
+            setUserSubscription({ plan: "free" });
             return;
         }
         const resultText = await db
@@ -64,9 +68,9 @@ function UsageTrack() {
             .from(UserSubscriptionTable)
             .where(eq(UserSubscriptionTable.email, email));
         if (resultText && resultText.length > 0) {
-            setUserSubscription(true);
+            setUserSubscription({ plan: "pro" }); // or use actual plan info if available
         } else {
-            setUserSubscription(false);
+            setUserSubscription({ plan: "free" });
         }
     };
 
@@ -80,7 +84,7 @@ function UsageTrack() {
     };
 
     // Set max tokens based on subscription
-    const maxTokens = userSubscription ? 100000 : 10000;
+    const maxTokens = userSubscription?.plan === "pro" ? 100000 : 10000;
     const percent = Math.min((totalTokens / maxTokens) * 100, 100);
 
     return (
