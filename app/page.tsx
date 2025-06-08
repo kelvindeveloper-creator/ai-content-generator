@@ -130,21 +130,21 @@ export default function LandingPage() {
 )}
         </header>
 
-        {/* AdSense Ad: Footer - Block 1 */}
-        <div className="flex justify-center my-8">
-          <div style={{ minWidth: 320, width: "100%", maxWidth: 900 }}>
-            <ins className="adsbygoogle"
-              style={{ display: "block", minWidth: 320 }}
-              data-ad-client="ca-pub-2428925859543002"
-              data-ad-slot="9942454769"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            />
-          </div>
-        </div>
-        <Script id="adsense-footer-init-1" strategy="afterInteractive">{`
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        `}</Script>
+        {/* AdSense Ad: Footer - Block 1 (hidden on mobile) */}
+<div className="hidden md:flex justify-center my-8">
+  <div style={{ minWidth: 320, width: "100%", maxWidth: 900 }}>
+    <ins className="adsbygoogle"
+      style={{ display: "block", minWidth: 320 }}
+      data-ad-client="ca-pub-2428925859543002"
+      data-ad-slot="9942454769"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+  </div>
+</div>
+<Script id="adsense-footer-init-1" strategy="afterInteractive">{`
+  (adsbygoogle = window.adsbygoogle || []).push({});
+`}</Script>
 
         {/* Hero Section with Video */}
         <section className="flex-1 flex flex-col items-center justify-center text-center px-2 md:px-4">
