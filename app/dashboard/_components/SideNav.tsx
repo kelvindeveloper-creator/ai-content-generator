@@ -18,7 +18,6 @@ function SideNav() {
     const pathname = usePathname()
     const [mobileOpen, setMobileOpen] = useState(false)
 
-    // Render menu items
     const menuItems = (
         <div className='mt-3'>
             {MenuList.map((menu, index) => (
