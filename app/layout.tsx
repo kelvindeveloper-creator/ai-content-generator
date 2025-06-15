@@ -7,9 +7,9 @@ import Providers from "./providers";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MediaTools.online – AI Content Generator & Media Editing Suite",
+  title: "AI Content Generator & Tools for Finance, Law, Insurance, and Technology",
   description:
-    "Create, edit, and automate high-quality content with AI-powered tools. MediaTools.online offers blog, social media, and marketing templates, plus an intuitive media editing suite for creators, marketers, and businesses.",
+    "Generate high-quality AI content for finance, law, car insurance, health insurance, and technology.",
 };
 
 export default function RootLayout({
